@@ -3,230 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="קושחה.נט — הורדת קושחאות למכשירי אנדרואיד">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
     <title>קושחה.נט</title>
-    
     <link rel="icon" type="image/png" href="favicon.png">
-
-    <style>
-        /* --- הגדרות בסיסיות --- */
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f0f2f5;
-            margin: 0;
-            padding: 0;
-            color: #333;
-            line-height: 1.6;
-            transition: background-color 0.4s, color 0.4s;
-        }
-
-        /* --- מתג מצב לילה (בצד שמאל) --- */
-        .theme-switch-wrapper {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-            z-index: 1000;
-        }
-
-        .theme-switch {
-            display: inline-block;
-            height: 24px;
-            position: relative;
-            width: 50px;
-        }
-
-        .theme-switch input { display: none; }
-
-        .slider {
-            background-color: #ccc;
-            position: absolute;
-            cursor: pointer;
-            top: 0; left: 0; right: 0; bottom: 0;
-            transition: 0.4s;
-            border-radius: 34px;
-        }
-
-        .slider:before {
-            background-color: #fff;
-            content: "";
-            height: 16px; width: 16px;
-            left: 4px; bottom: 4px;
-            position: absolute;
-            transition: 0.4s;
-            border-radius: 50%;
-        }
-
-        input:checked + .slider { background-color: #3498db; }
-        input:checked + .slider:before { transform: translateX(26px); }
-
-        #mode-label {
-            font-size: 12px;
-            font-weight: bold;
-            transition: color 0.4s;
-        }
-
-        /* --- עיצוב האתר --- */
-        header {
-            background-color: #ffffff;
-            border-bottom: 1px solid #ddd;
-            padding: 20px 0;
-            text-align: center;
-            transition: background-color 0.4s;
-        }
-
-        header h1 {
-            margin: 0;
-            font-size: 2.5em;
-            color: #2c3e50;
-        }
-
-        nav { margin-top: 15px; }
-        nav a {
-            margin: 0 15px;
-            text-decoration: none;
-            color: #555;
-            font-weight: bold;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 30px auto;
-            padding: 20px;
-        }
-
-        .about-section {
-            background: #2c3e50;
-            color: white;
-            padding: 30px;
-            border-radius: 8px;
-            margin-bottom: 40px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-            text-align: center;
-        }
-
-        .about-section h2 {
-            margin-top: 0;
-            color: #ecf0f1;
-            border-bottom: 2px solid #3498db;
-            display: inline-block;
-            padding-bottom: 5px;
-        }
-
-        footer {
-            text-align: center;
-            padding: 30px;
-            background: #ffffff;
-            border-top: 1px solid #ddd;
-            margin-top: 50px;
-            transition: background-color 0.4s;
-        }
-
-        .footer-links a {
-            display: inline-flex;
-            align-items: center;
-            color: #3498db;
-            text-decoration: none;
-            margin: 0 15px;
-            font-weight: bold;
-        }
-
-        .footer-links img {
-            width: 18px; height: 18px;
-            margin-left: 8px;
-            vertical-align: middle;
-            border-radius: 3px;
-        }
-
-        /* --- מצב לילה (Dark Mode) --- */
-        body.dark-mode {
-            background-color: #121212;
-            color: #e0e0e0;
-        }
-
-        body.dark-mode header, 
-        body.dark-mode footer {
-            background-color: #1e1e1e;
-            border-color: #333;
-        }
-
-        body.dark-mode header h1, 
-        body.dark-mode nav a,
-        body.dark-mode #mode-label {
-            color: #ffffff;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div class="theme-switch-wrapper">
-        <label class="theme-switch" for="checkbox">
-            <input type="checkbox" id="checkbox" />
-            <div class="slider round"></div>
+    <!-- מתג ערכת נושא -->
+    <div class="theme-toggle" role="switch" aria-label="החלפת מצב תצוגה">
+        <label class="toggle-track" for="themeCheckbox" title="החלפת מצב יום/לילה">
+            <input type="checkbox" id="themeCheckbox" aria-label="מצב יום">
+            <span class="toggle-thumb"></span>
         </label>
-        <span id="mode-label">מצב יום</span>
+        <span class="toggle-label" id="themeLabel">לילה</span>
     </div>
 
+    <!-- כותרת -->
     <header>
-        <h1>קושחה.נט</h1>
+        <div class="header-logo">קושחה<span>.נט</span></div>
         <nav>
-            <a href="index.html">דף הבית</a>
-            <a href="Firmware Downloads.html">קושחאות להורדה</a>
-            <a href="#main-footer">אודות</a>
+            <a href="index.html" class="active">דף הבית</a>
+            <a href="downloads.html">קושחאות להורדה</a>
         </nav>
     </header>
 
-    <div class="container">
-        <section class="about-section">
-            <h2>על האתר</h2>
-            <p>
-               אתר הורדת קושחאות למכשירי אנדרואיד - מתמחים טופ
-            </p>
-        </section>
-    </div>
+    <!-- תוכן ראשי -->
+    <main class="container">
 
-    <footer id="main-footer">
-        <p>&copy; כל הזכויות שמורות - ישראל מאיר שגיב</p>
+        <div class="page-title">ברוכים הבאים לקושחה.נט</div>
+
+        <section class="about-card" id="about">
+            <h2>// על האתר</h2>
+            <p>
+                קושחה.נט הוא מרכז להורדת קושחאות למכשירי אנדרואיד מבית מתמחים טופ.
+                כאן תמצאו גרסאות לטווח רחב של מכשירים.
+            </p>
+            <p style="margin-top: 12px; color: var(--text-muted); font-size: 0.9em;">
+                כל הקבצים נבדקים ומאושרים לפני פרסום. אחריות השימוש על המשתמש.
+        </section>
+
+    </main>
+
+    <!-- פוטר -->
+    <footer>
+        <p class="footer-copy">© כל הזכויות שמורות — ישראל מאיר שגיב</p>
         <div class="footer-links">
             <a href="https://github.com/mahaneh-iedidim" target="_blank" rel="noopener noreferrer">
-                <img src="https://github.com/favicon.ico" alt="GitHub">
-                גיטהאב (GitHub)
+                <img src="https://github.com/favicon.ico" alt="GitHub" loading="lazy">
+                GitHub
             </a>
-            <span style="color: #ddd;">|</span>
+            <span class="footer-sep">•</span>
             <a href="https://mitmachim.top" target="_blank" rel="noopener noreferrer">
-                <img src="https://mitmachim.top/favicon.ico" alt="Mitmachim">
+                <img src="https://mitmachim.top/favicon.ico" alt="מתמחים טופ" loading="lazy">
                 מתמחים טופ
             </a>
         </div>
     </footer>
 
-    <script>
-        const toggleSwitch = document.querySelector('#checkbox');
-        const body = document.body;
-        const modeLabel = document.getElementById('mode-label');
-
-        function updateTheme(isDark) {
-            if (isDark) {
-                body.classList.add('dark-mode');
-                modeLabel.textContent = 'מצב לילה';
-                toggleSwitch.checked = true;
-            } else {
-                body.classList.remove('dark-mode');
-                modeLabel.textContent = 'מצב יום';
-                toggleSwitch.checked = false;
-            }
-        }
-
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme === 'dark') updateTheme(true);
-
-        toggleSwitch.addEventListener('change', () => {
-            const isDark = toggleSwitch.checked;
-            updateTheme(isDark);
-            localStorage.setItem('theme', isDark ? 'dark' : 'light');
-        });
-    </script>
+    <script src="app.js"></script>
 </body>
 </html>
