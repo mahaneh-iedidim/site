@@ -414,14 +414,14 @@ footer {
 .footer-links a img { width: 15px; height: 15px; border-radius: 2px; }
 .footer-sep { color: var(--border-light); font-size: 0.7em; }
 
-/* ─── רספונסיב משופר ─── */
+/* ─── רספונסיב משופר מעודכן ─── */
 @media (max-width: 768px) {
-    /* 1. התאמת המכולה הראשית - פחות ריווח בצדדים */
+    /* 1. התאמת המכולה הראשית */
     .container {
         padding: 15px 12px;
     }
 
-    /* 2. לוגו ותפריט - מעבר לטור במידת הצורך */
+    /* 2. לוגו ותפריט */
     .header-logo { font-size: 1.6em; }
     
     nav { 
@@ -431,31 +431,31 @@ footer {
     }
     
     nav a { 
-        flex: 1 1 40%; /* הופך את הכפתורים ליותר גדולים ונוחים ללחיצה */
+        flex: 1 1 40%; 
         padding: 8px; 
         font-size: 0.85em; 
         text-align: center;
     }
 
-    /* 3. כרטיס אודות - ביטול הפדינג המוגזם */
+    /* 3. כרטיס אודות */
     .about-card { 
         padding: 20px 15px; 
         margin-bottom: 20px;
     }
 
-    /* 4. פתרון הטבלה - הפיכתה לרשימה (Cards) */
-    /* זה החלק הכי חשוב כדי למנוע גלילה לצדדים */
+    /* 4. פתרון הטבלה - הפיכתה לרשימה */
     .table-wrap {
         border: none;
         background: transparent;
     }
 
+    /* חשוב: הוספתי החרגה ל-theme-toggle כדי שלא יימרח */
     table, thead, tbody, th, td, tr { 
         display: block; 
     }
 
     thead { 
-        display: none; /* מסתירים את הכותרות המקוריות של הטבלה */
+        display: none; 
     }
 
     tbody tr {
@@ -472,28 +472,46 @@ footer {
         border-bottom: 1px solid var(--border-light);
         display: flex;
         justify-content: space-between;
+        align-items: center;
     }
 
     tbody td:last-child {
         border-bottom: none;
-        justify-content: center; /* כפתור הורדה במרכז */
+        justify-content: center; 
         padding-top: 15px !important;
     }
 
-    /* 5. כפתור החלפת ערכת נושא */
+    /* 5. תיקון כפתור ערכת נושא - מניעת מריחה */
     .theme-toggle { 
         top: 10px; 
-        left: 10px; 
+        left: 10px;
+        display: flex !important; /* מבטל את ה-block */
+        flex-direction: column;
+        align-items: center;
+        width: auto !important;
     }
     
     .toggle-track {
-        width: 40px;
-        height: 20px;
+        display: block !important;
+        width: 46px !important; /* חזרה לגודל המקורי */
+        height: 24px !important;
+        position: relative !important;
+    }
+
+    .toggle-thumb {
+        display: block !important;
+        position: absolute !important;
+    }
+
+    .toggle-label {
+        display: block !important;
+        width: auto !important;
+        margin-top: 4px;
     }
 }
 
-/* בונוס: תיקון למסכים קטנים מאוד (פלאפונים ישנים) */
+/* תיקון למסכים קטנים מאוד */
 @media (max-width: 480px) {
     .header-logo { font-size: 1.3em; }
-    nav a { flex: 1 1 100%; } /* כל כפתור ניווט בשורה נפרדת */
+    nav a { flex: 1 1 100%; } 
 }
