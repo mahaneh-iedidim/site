@@ -414,12 +414,86 @@ footer {
 .footer-links a img { width: 15px; height: 15px; border-radius: 2px; }
 .footer-sep { color: var(--border-light); font-size: 0.7em; }
 
-/* ─── רספונסיב ─── */
-@media (max-width: 640px) {
-    .header-logo { font-size: 1.5em; }
-    nav { gap: 4px; }
-    nav a { padding: 5px 10px; font-size: 0.8em; }
-    .about-card { padding: 24px 20px; }
-    tbody td { padding: 11px 10px; }
-    .theme-toggle { top: 12px; left: 12px; }
+/* ─── רספונסיב משופר ─── */
+@media (max-width: 768px) {
+    /* 1. התאמת המכולה הראשית - פחות ריווח בצדדים */
+    .container {
+        padding: 15px 12px;
+    }
+
+    /* 2. לוגו ותפריט - מעבר לטור במידת הצורך */
+    .header-logo { font-size: 1.6em; }
+    
+    nav { 
+        flex-wrap: wrap; 
+        gap: 8px; 
+        padding: 0 10px;
+    }
+    
+    nav a { 
+        flex: 1 1 40%; /* הופך את הכפתורים ליותר גדולים ונוחים ללחיצה */
+        padding: 8px; 
+        font-size: 0.85em; 
+        text-align: center;
+    }
+
+    /* 3. כרטיס אודות - ביטול הפדינג המוגזם */
+    .about-card { 
+        padding: 20px 15px; 
+        margin-bottom: 20px;
+    }
+
+    /* 4. פתרון הטבלה - הפיכתה לרשימה (Cards) */
+    /* זה החלק הכי חשוב כדי למנוע גלילה לצדדים */
+    .table-wrap {
+        border: none;
+        background: transparent;
+    }
+
+    table, thead, tbody, th, td, tr { 
+        display: block; 
+    }
+
+    thead { 
+        display: none; /* מסתירים את הכותרות המקוריות של הטבלה */
+    }
+
+    tbody tr {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        margin-bottom: 12px;
+        padding: 10px;
+    }
+
+    tbody td {
+        text-align: right;
+        padding: 8px 5px !important;
+        border-bottom: 1px solid var(--border-light);
+        display: flex;
+        justify-content: space-between;
+    }
+
+    tbody td:last-child {
+        border-bottom: none;
+        justify-content: center; /* כפתור הורדה במרכז */
+        padding-top: 15px !important;
+    }
+
+    /* 5. כפתור החלפת ערכת נושא */
+    .theme-toggle { 
+        top: 10px; 
+        left: 10px; 
+    }
+    
+    .toggle-track {
+        width: 40px;
+        height: 20px;
+    }
+}
+
+/* בונוס: תיקון למסכים קטנים מאוד (פלאפונים ישנים) */
+@media (max-width: 480px) {
+    .header-logo { font-size: 1.3em; }
+    nav a { flex: 1 1 100%; } /* כל כפתור ניווט בשורה נפרדת */
 }
