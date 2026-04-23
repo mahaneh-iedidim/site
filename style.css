@@ -1,0 +1,425 @@
+/* =============================================
+   קושחה.נט — style.css
+   עיצוב: תעשייתי-טכנולוגי, ישיר ונקי
+   ============================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Heebo:wght@300;400;600;700&display=swap');
+
+/* ─── משתני צבע ─── */
+:root {
+    --bg:           #0d0f14;
+    --surface:      #151820;
+    --surface-2:    #1c2030;
+    --border:       #252b3b;
+    --border-light: #2e3650;
+    --text:         #dce3f0;
+    --text-muted:   #6b7a99;
+    --accent:       #3fe0c5;
+    --accent-dim:   #1a9e8b;
+    --danger:       #e05c3f;
+    --green:        #3fd17d;
+    --white:        #ffffff;
+}
+
+body.light-mode {
+    --bg:           #f4f6fb;
+    --surface:      #ffffff;
+    --surface-2:    #edf0f7;
+    --border:       #d8dce8;
+    --border-light: #c4cad8;
+    --text:         #1a1f2e;
+    --text-muted:   #7a859e;
+    --accent:       #0a7d6c;
+    --accent-dim:   #0a6057;
+}
+
+/* ─── ריסט ובסיס ─── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+    font-family: 'Heebo', sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    min-height: 100vh;
+    transition: background-color 0.35s, color 0.35s;
+    direction: rtl;
+}
+
+a { color: var(--accent); text-decoration: none; transition: color 0.2s; }
+a:hover { color: var(--white); }
+
+/* ─── מתג ערכת נושא ─── */
+.theme-toggle {
+    position: fixed;
+    top: 18px;
+    left: 18px;
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.toggle-track {
+    width: 46px;
+    height: 24px;
+    background: var(--border-light);
+    border-radius: 12px;
+    position: relative;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    transition: background 0.3s;
+}
+
+.toggle-track input { display: none; }
+
+.toggle-thumb {
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    width: 16px;
+    height: 16px;
+    background: var(--accent);
+    border-radius: 50%;
+    transition: transform 0.3s;
+}
+
+.toggle-track input:checked ~ .toggle-thumb { transform: translateX(-22px); }
+.toggle-track input:checked ~ .toggle-thumb { background: var(--accent); }
+
+.toggle-label {
+    font-size: 10px;
+    font-family: 'IBM Plex Mono', monospace;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    user-select: none;
+}
+
+/* ─── כותרת ─── */
+header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 22px 0 18px;
+    text-align: center;
+    position: relative;
+}
+
+.header-logo {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 2em;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.04em;
+    display: inline-block;
+}
+
+.header-logo span {
+    color: var(--text-muted);
+    font-weight: 400;
+}
+
+nav {
+    margin-top: 14px;
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+}
+
+nav a {
+    font-size: 0.85em;
+    font-weight: 600;
+    color: var(--text-muted);
+    padding: 6px 16px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    transition: all 0.2s;
+    letter-spacing: 0.03em;
+}
+
+nav a:hover, nav a.active {
+    color: var(--accent);
+    border-color: var(--border-light);
+    background: var(--surface-2);
+}
+
+/* ─── כלי עזר ─── */
+.container { max-width: 960px; margin: 0 auto; padding: 28px 20px; }
+
+.page-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 1.05em;
+    color: var(--text-muted);
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.page-title::before {
+    content: '';
+    display: block;
+    width: 3px;
+    height: 18px;
+    background: var(--accent);
+    border-radius: 2px;
+    flex-shrink: 0;
+}
+
+/* ─── כרטיס "אודות" ─── */
+.about-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 36px 40px;
+    margin-bottom: 36px;
+    position: relative;
+    overflow: hidden;
+}
+
+.about-card::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(to bottom, var(--accent), transparent);
+    border-radius: 0 8px 8px 0;
+}
+
+.about-card h2 {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.95em;
+    font-weight: 600;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 16px;
+}
+
+.about-card p {
+    color: var(--text);
+    font-size: 1em;
+    font-weight: 300;
+    line-height: 1.8;
+}
+
+.tag-line {
+    display: inline-block;
+    margin-top: 18px;
+    padding: 4px 14px;
+    background: var(--surface-2);
+    border: 1px solid var(--border-light);
+    border-radius: 20px;
+    font-size: 0.78em;
+    font-family: 'IBM Plex Mono', monospace;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+}
+
+/* ─── לחצן חזרה ─── */
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85em;
+    font-weight: 600;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 6px 14px;
+    margin-bottom: 24px;
+    background: var(--surface);
+    transition: all 0.2s;
+}
+
+.back-btn:hover { color: var(--accent); border-color: var(--accent-dim); }
+
+/* ─── טבלת קושחאות ─── */
+.table-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.table-header-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface-2);
+}
+
+.table-header-bar h3 {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.82em;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.table-count {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.76em;
+    color: var(--accent);
+    background: rgba(63, 224, 197, 0.08);
+    border: 1px solid rgba(63, 224, 197, 0.2);
+    padding: 2px 10px;
+    border-radius: 12px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead th {
+    padding: 11px 18px;
+    text-align: center;
+    font-size: 0.78em;
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    background: var(--surface-2);
+    border-bottom: 1px solid var(--border);
+}
+
+tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background 0.15s;
+}
+
+tbody tr:last-child { border-bottom: none; }
+tbody tr:hover { background: var(--surface-2); }
+
+tbody td {
+    padding: 13px 18px;
+    text-align: center;
+    font-size: 0.92em;
+    color: var(--text);
+}
+
+.fw-name {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.88em !important;
+    font-weight: 600;
+    color: var(--accent) !important;
+}
+
+.fw-size {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.82em !important;
+    color: var(--text-muted) !important;
+}
+
+.badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 3px;
+    font-size: 0.72em;
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.badge-stable  { background: rgba(63, 209, 125, 0.12); color: var(--green); border: 1px solid rgba(63, 209, 125, 0.25); }
+.badge-beta    { background: rgba(63, 224, 197, 0.10); color: var(--accent); border: 1px solid rgba(63, 224, 197, 0.2); }
+.badge-alpha   { background: rgba(224, 92, 63, 0.10); color: var(--danger); border: 1px solid rgba(224, 92, 63, 0.2); }
+.badge-legacy  { background: rgba(107, 122, 153, 0.12); color: var(--text-muted); border: 1px solid var(--border-light); }
+
+.dl-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 16px;
+    background: transparent;
+    color: var(--green);
+    border: 1px solid rgba(63, 209, 125, 0.35);
+    border-radius: 4px;
+    font-size: 0.82em;
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.04em;
+}
+
+.dl-btn:hover {
+    background: rgba(63, 209, 125, 0.1);
+    border-color: var(--green);
+    color: var(--green);
+}
+
+.dl-btn.disabled {
+    color: var(--text-muted);
+    border-color: var(--border);
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.dl-btn.disabled:hover { background: transparent; }
+
+/* ─── פוטר ─── */
+footer {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 28px 20px;
+    text-align: center;
+    margin-top: 60px;
+}
+
+.footer-copy {
+    font-size: 0.8em;
+    color: var(--text-muted);
+    font-family: 'IBM Plex Mono', monospace;
+    margin-bottom: 14px;
+}
+
+.footer-links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.footer-links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 0.82em;
+    font-weight: 600;
+    color: var(--text-muted);
+    padding: 6px 14px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: var(--surface-2);
+    transition: all 0.2s;
+}
+
+.footer-links a:hover {
+    color: var(--accent);
+    border-color: var(--accent-dim);
+}
+
+.footer-links a img { width: 15px; height: 15px; border-radius: 2px; }
+.footer-sep { color: var(--border-light); font-size: 0.7em; }
+
+/* ─── רספונסיב ─── */
+@media (max-width: 640px) {
+    .header-logo { font-size: 1.5em; }
+    nav { gap: 4px; }
+    nav a { padding: 5px 10px; font-size: 0.8em; }
+    .about-card { padding: 24px 20px; }
+    tbody td { padding: 11px 10px; }
+    .theme-toggle { top: 12px; left: 12px; }
+}
