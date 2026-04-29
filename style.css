@@ -384,13 +384,13 @@ tbody td {
 }
 
 .split-box h2 {
-    font-family: 'IBM Plex Mono', monospace;
+    font-family: 'Heebo', sans-serif;
     font-size: 0.95em;
     font-weight: 600;
     color: var(--accent);
     text-transform: uppercase;
     letter-spacing: 0.12em;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
 }
 
 /* ─── פוטר ─── */
