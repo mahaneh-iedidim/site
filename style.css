@@ -368,6 +368,21 @@ tbody td {
 
 .dl-btn.disabled:hover { background: transparent; }
 
+/* ─── בלוק מחולק לשניים ─── */
+.split-container {
+    display: flex;
+    gap: 20px;
+    margin-top: 40px;
+}
+
+.split-box {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px;
+}
+
 /* ─── פוטר ─── */
 footer {
     background: var(--surface);
