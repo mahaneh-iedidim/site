@@ -529,4 +529,7 @@ footer {
 @media (max-width: 480px) {
     .header-logo { font-size: 1.3em; }
     nav a { flex: 1 1 100%; } 
+   .split-container {
+    flex-direction: column;
+}
 }
