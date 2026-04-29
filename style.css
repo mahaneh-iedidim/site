@@ -383,6 +383,16 @@ tbody td {
     padding: 24px;
 }
 
+.split-box h2 {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.95em;
+    font-weight: 600;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 16px;
+}
+
 /* ─── פוטר ─── */
 footer {
     background: var(--surface);
