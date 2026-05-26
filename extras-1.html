@@ -29,7 +29,23 @@
         .accordion-body tbody tr:last-child { border-bottom: none; }
         .accordion-body tbody tr:hover { background: var(--surface-2); }
         .accordion-body tbody td { padding: 13px 18px; text-align: center; font-size: 0.9em; color: var(--text); }
-        .fw-img { width: 64px; height: 64px; object-fit: cover; border-radius: 5px; border: 1px solid var(--border); display: block; margin: 0 auto; }
+        .fw-img {
+    width: 120px;
+    height: 80px;
+    object-fit: contain;
+    border-radius: 5px;
+    border: 1px solid var(--border);
+    display: block;
+    margin: 0 auto;
+    cursor: zoom-in;
+    transition: transform 0.2s;
+}
+
+.fw-img:active {
+    transform: scale(3);
+    z-index: 999;
+    position: relative;
+}
         .no-img { font-family: 'IBM Plex Mono', monospace; font-size: 0.72em; color: var(--text-muted); font-style: italic; }
         .empty-row td { color: var(--text-muted); font-family: 'IBM Plex Mono', monospace; font-size: 0.8em !important; font-style: italic; padding: 22px 18px !important; }
         @media (max-width: 768px) {
