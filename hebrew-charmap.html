@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>מפת תווים עברית</title>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300;400;700;900&family=Heebo:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f0e0b;
+    --surface: #1a1812;
+    --border: #2e2a1f;
+    --gold: #c8a84b;
+    --gold-light: #e8c96a;
+    --cream: #f0e8d0;
+    --muted: #7a7060;
+    --accent: #8b4513;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--cream);
+    font-family: 'Heebo', sans-serif;
+    min-height: 100vh;
+    padding: 2rem 1rem;
+    direction: rtl;
+  }
+
+  /* Parchment texture overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(ellipse at 20% 80%, rgba(200,168,75,0.04) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 20%, rgba(139,69,19,0.05) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 3rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+
+  header::after {
+    content: '✦';
+    position: absolute;
+    bottom: -0.65rem;
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--gold);
+    background: var(--bg);
+    padding: 0 0.5rem;
+    font-size: 0.7rem;
+  }
+
+  h1 {
+    font-family: 'Frank Ruhl Libre', serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 900;
+    color: var(--gold-light);
+    letter-spacing: 0.02em;
+    line-height: 1.1;
+    margin-bottom: 0.5rem;
+  }
+
+  .subtitle {
+    color: var(--muted);
+    font-size: 0.9rem;
+    letter-spacing: 0.1em;
+  }
+
+  section {
+    margin-bottom: 2.5rem;
+  }
+
+  .section-title {
+    font-family: 'Frank Ruhl Libre', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--gold);
+    letter-spacing: 0.08em;
+    margin-bottom: 1rem;
+    padding-right: 0.75rem;
+    border-right: 3px solid var(--gold);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .section-title .unicode-range {
+    font-size: 0.75rem;
+    color: var(--muted);
+    font-family: 'Heebo', sans-serif;
+    font-weight: 300;
+    direction: ltr;
+  }
+
+  /* Character grid */
+  .char-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(68px, 1fr));
+    gap: 6px;
+  }
+
+  .char-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.6rem 0.4rem 0.5rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .char-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(200,168,75,0.05), transparent);
+    opacity: 0;
+    transition: opacity 0.18s;
+  }
+
+  .char-card:hover {
+    border-color: var(--gold);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(200,168,75,0.12);
+  }
+
+  .char-card:hover::before { opacity: 1; }
+
+  .char-card.copied {
+    border-color: #4caf50;
+    background: rgba(76,175,80,0.08);
+  }
+
+  .char-display {
+    font-family: 'Frank Ruhl Libre', serif;
+    font-size: 1.9rem;
+    font-weight: 400;
+    color: var(--cream);
+    line-height: 1.2;
+    display: block;
+    min-height: 2.3rem;
+  }
+
+  .char-name {
+    font-size: 0.6rem;
+    color: var(--muted);
+    margin-top: 0.3rem;
+    line-height: 1.2;
+    font-weight: 300;
+  }
+
+  .char-code {
+    font-size: 0.55rem;
+    color: var(--border);
+    font-family: monospace;
+    direction: ltr;
+    margin-top: 1px;
+  }
+
+  /* Niqqud demo section */
+  .demo-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.25rem 1.5rem;
+    margin-top: 0.75rem;
+  }
+
+  .demo-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    align-items: flex-start;
+  }
+
+  .demo-item {
+    text-align: center;
+    cursor: pointer;
+    padding: 0.5rem 0.7rem;
+    border-radius: 6px;
+    border: 1px solid transparent;
+    transition: all 0.15s;
+  }
+
+  .demo-item:hover {
+    border-color: var(--gold);
+    background: rgba(200,168,75,0.06);
+  }
+
+  .demo-char {
+    font-family: 'Frank Ruhl Libre', serif;
+    font-size: 2.4rem;
+    display: block;
+    color: var(--cream);
+    line-height: 1.4;
+  }
+
+  .demo-label {
+    font-size: 0.62rem;
+    color: var(--muted);
+    margin-top: 0.3rem;
+    direction: rtl;
+  }
+
+  /* Tooltip */
+  .toast {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--gold);
+    color: var(--bg);
+    padding: 0.5rem 1.2rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    opacity: 0;
+    transition: all 0.25s ease;
+    pointer-events: none;
+    z-index: 1000;
+    white-space: nowrap;
+  }
+
+  .toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  /* Divider */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 2rem 0;
+  }
+
+  /* Special char highlight */
+  .char-card.highlight .char-display { color: var(--gold-light); }
+
+  footer {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.75rem;
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+    letter-spacing: 0.05em;
+  }
+
+  /* Animate in */
+  .char-card {
+    animation: fadeUp 0.3s ease both;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <h1>מפת תווים עברית</h1>
+    <p class="subtitle">לחץ על תו להעתקה • Unicode Block U+0590–U+05FF</p>
+  </header>
+
+  <!-- LETTERS -->
+  <section>
+    <div class="section-title">
+      אותיות עבריות
+      <span class="unicode-range">U+05D0–U+05EA</span>
+    </div>
+    <div class="char-grid" id="letters"></div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- FINAL LETTERS -->
+  <section>
+    <div class="section-title">
+      אותיות סופיות
+      <span class="unicode-range">כּ מ נ פ צ — צורות סופיות</span>
+    </div>
+    <div class="char-grid" id="finals"></div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- NIQQUD -->
+  <section>
+    <div class="section-title">
+      סימני ניקוד (נִקּוּד)
+      <span class="unicode-range">U+05B0–U+05C7</span>
+    </div>
+    <div class="demo-block">
+      <div class="demo-row" id="niqqud"></div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- CANTILLATION -->
+  <section>
+    <div class="section-title">
+      טעמי המקרא (טְעָמִים)
+      <span class="unicode-range">U+0591–U+05AF</span>
+    </div>
+    <div class="demo-block">
+      <div class="demo-row" id="cantillation"></div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- PUNCTUATION -->
+  <section>
+    <div class="section-title">
+      סימני פיסוק עבריים
+      <span class="unicode-range">U+05BE, U+05C0, U+05C3, U+05F3–U+05F4</span>
+    </div>
+    <div class="char-grid" id="punctuation"></div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- PRESENTATION FORMS -->
+  <section>
+    <div class="section-title">
+      צורות הצגה (Presentation Forms)
+      <span class="unicode-range">U+FB1D–U+FB4E</span>
+    </div>
+    <div class="char-grid" id="presentation"></div>
+  </section>
+
+  <footer>
+    כל התווים מגוש Unicode העברי • לחץ כדי להעתיק ללוח
+  </footer>
+</div>
+
+<div class="toast" id="toast">הועתק ✓</div>
+
+<script>
+const letters = [
+  {ch:'א',name:'אלף',code:'05D0'},{ch:'בּ',name:'בֵּית',code:'05D1+05BC'},{ch:'גּ',name:'גִּימֶל',code:'05D2'},{ch:'דּ',name:'דָּלֶת',code:'05D3'},
+  {ch:'הּ',name:'הֵא',code:'05D4'},{ch:'וּ',name:'וָו',code:'05D5'},{ch:'זּ',name:'זַיִן',code:'05D6'},{ch:'חּ',name:'חֵית',code:'05D7'},
+  {ch:'טּ',name:'טֵית',code:'05D8'},{ch:'יּ',name:'יוֹד',code:'05D9'},{ch:'כּ',name:'כַּף',code:'05DB+05BC'},{ch:'לּ',name:'לָמֶד',code:'05DC'},
+  {ch:'מּ',name:'מֵם',code:'05DE'},{ch:'נּ',name:'נוּן',code:'05E0'},{ch:'סּ',name:'סָמֶך',code:'05E1'},{ch:'עּ',name:'עַיִן',code:'05E2'},
+  {ch:'פּ',name:'פֵּא',code:'05E4+05BC'},{ch:'צּ',name:'צָדִי',code:'05E6'},{ch:'קּ',name:'קוֹף',code:'05E7'},{ch:'רּ',name:'רֵישׁ',code:'05E8'},
+  {ch:'שּׁ',name:'שִׁין',code:'05E9+05C1'},{ch:'תּ',name:'תָּו',code:'05EA'},
+  // Plain (without dagesh)
+  {ch:'א',name:'אלף',code:'05D0'},{ch:'ב',name:'בֵית',code:'05D1'},{ch:'ג',name:'גִימֶל',code:'05D2'},{ch:'ד',name:'דָלֶת',code:'05D3'},
+  {ch:'ה',name:'הֵא',code:'05D4'},{ch:'ו',name:'וָו',code:'05D5'},{ch:'ז',name:'זַיִן',code:'05D6'},{ch:'ח',name:'חֵית',code:'05D7'},
+  {ch:'ט',name:'טֵית',code:'05D8'},{ch:'י',name:'יוֹד',code:'05D9'},{ch:'כ',name:'כַּף',code:'05DB'},{ch:'ל',name:'לָמֶד',code:'05DC'},
+  {ch:'מ',name:'מֵם',code:'05DE'},{ch:'נ',name:'נוּן',code:'05E0'},{ch:'ס',name:'סָמֶך',code:'05E1'},{ch:'ע',name:'עַיִן',code:'05E2'},
+  {ch:'פ',name:'פֵּא',code:'05E4'},{ch:'צ',name:'צָדִי',code:'05E6'},{ch:'ק',name:'קוֹף',code:'05E7'},{ch:'ר',name:'רֵישׁ',code:'05E8'},
+  {ch:'שׁ',name:'שִׁין',code:'05E9'},{ch:'ת',name:'תָּו',code:'05EA'},
+];
+
+// Deduplicate: show each base letter once
+const baseLetters = [
+  {ch:'א',name:'אלף',code:'05D0'},{ch:'ב',name:'בֵית',code:'05D1'},{ch:'ג',name:'גִימֶל',code:'05D2'},{ch:'ד',name:'דָלֶת',code:'05D3'},
+  {ch:'ה',name:'הֵא',code:'05D4'},{ch:'ו',name:'וָו',code:'05D5'},{ch:'ז',name:'זַיִן',code:'05D6'},{ch:'ח',name:'חֵית',code:'05D7'},
+  {ch:'ט',name:'טֵית',code:'05D8'},{ch:'י',name:'יוֹד',code:'05D9'},{ch:'כ',name:'כַּף',code:'05DB'},{ch:'ל',name:'לָמֶד',code:'05DC'},
+  {ch:'מ',name:'מֵם',code:'05DE'},{ch:'נ',name:'נוּן',code:'05E0'},{ch:'ס',name:'סָמֶך',code:'05E1'},{ch:'ע',name:'עַיִן',code:'05E2'},
+  {ch:'פ',name:'פֵּא',code:'05E4'},{ch:'צ',name:'צָדִי',code:'05E6'},{ch:'ק',name:'קוֹף',code:'05E7'},{ch:'ר',name:'רֵישׁ',code:'05E8'},
+  {ch:'שׁ',name:'שִׁין (שין ימנית)',code:'05E9+05C1'},{ch:'שׂ',name:'שִׂין (שין שמאלית)',code:'05E9+05C2'},{ch:'ת',name:'תָּו',code:'05EA'},
+];
+
+const finals = [
+  {ch:'ך',name:'כף סופית',code:'05DA'},{ch:'ם',name:'מם סופית',code:'05DD'},
+  {ch:'ן',name:'נון סופית',code:'05DF'},{ch:'ף',name:'פא סופית',code:'05E3'},
+  {ch:'ץ',name:'צדי סופית',code:'05E5'},
+];
+
+const niqqud = [
+  {base:'בְ',name:'שְׁוָא',code:'05B0'},{base:'בֱ',name:'חֲטַף סגול',code:'05B1'},{base:'בֲ',name:'חֲטַף פַּתַח',code:'05B2'},
+  {base:'בֳ',name:'חֲטַף קָמַץ',code:'05B3'},{base:'בִ',name:'חִירִיק',code:'05B4'},{base:'בֵ',name:'צֵרֵי',code:'05B5'},
+  {base:'בֶ',name:'סֶגּוֹל',code:'05B6'},{base:'בַ',name:'פַּתַח',code:'05B7'},{base:'בָ',name:'קָמַץ',code:'05B8'},
+  {base:'בֹ',name:'חֹלֶם חָסֵר',code:'05B9'},{base:'בֺ',name:'חֹלֶם מָלֵא',code:'05BA'},{base:'בֻ',name:'קִבּוּץ',code:'05BB'},
+  {base:'בּ',name:'דָּגֵשׁ/מַפִּיק',code:'05BC'},{base:'בּ',name:'דָּגֵשׁ חָזָק',code:'05BC'},{base:'וּ',name:'שׁוּרֻק',code:'05D5+05BC'},
+  {base:'בֿ',name:'רָפֶה',code:'05BF'},{base:'בּ',name:'מֶתֶג',code:'05BD'},
+];
+
+const cantillation = [
+  {base:'אֽ',name:'מֵתֶג (מֶרְכָּא)',code:'05BD'},{base:'א֑',name:'אֶתְנַחְתָּא',code:'0591'},
+  {base:'א֒',name:'סֶגּוֹל (טַעַם)',code:'0592'},{base:'א֓',name:'שַׁלְשֶׁלֶת',code:'0593'},
+  {base:'א֔',name:'זָקֵף קָטָן',code:'0594'},{base:'א֕',name:'זָקֵף גָּדוֹל',code:'0595'},
+  {base:'א֖',name:'תִּפְחָא',code:'0596'},{base:'א֗',name:'רְבִיעַ',code:'0597'},
+  {base:'א֘',name:'זַרְקָא',code:'0598'},{base:'א֙',name:'פַּשְׁטָא',code:'0599'},
+  {base:'א֚',name:'יֵתִיב',code:'059A'},{base:'א֛',name:'תְּבִיר',code:'059B'},
+  {base:'א֜',name:'גֵּרֵשׁ',code:'059C'},{base:'א֝',name:'גֵּרְשַׁיִם',code:'059D'},
+  {base:'א֞',name:'פַּזֵּר',code:'059E'},{base:'א֟',name:'קַרְנֵי פָרָה',code:'059F'},
+  {base:'א֠',name:'תֵּלִישָׁא גְּדוֹלָה',code:'05A0'},{base:'א֡',name:'פָּזֵר גָּדוֹל',code:'05A1'},
+  {base:'א֢',name:'אַזְלָא',code:'05A2'},{base:'א֣',name:'מֵרְכָּא',code:'05A3'},
+  {base:'א֤',name:'מֵרְכָּא כְּפֻלָּה',code:'05A4'},{base:'א֥',name:'מֵרְכָּא נֶגֶד',code:'05A5'},
+  {base:'א֦',name:'תַּרְסָא',code:'05A6'},{base:'א֧',name:'דַּרְגָּא',code:'05A7'},
+  {base:'א֨',name:'קַדְמָא',code:'05A8'},{base:'א֩',name:'תֵּלִישָׁא קְטַנָּה',code:'05A9'},
+  {base:'א֪',name:'יֶרַח בֶּן יוֹמוֹ',code:'05AA'},{base:'א֫',name:'עוֹלֶה',code:'05AB'},
+  {base:'א֬',name:'אִלּוּי',code:'05AC'},{base:'א֭',name:'דְּחִי',code:'05AD'},
+  {base:'א֮',name:'צִנּוֹר',code:'05AE'},{base:'א֯',name:'מַשְׁלִים',code:'05AF'},
+];
+
+const punctuation = [
+  {ch:'־',name:'מַקָּף (Maqaf)',code:'05BE'},
+  {ch:'׀',name:'פָּסֵק (Paseq)',code:'05C0'},
+  {ch:'׃',name:'סוֹף פָּסוּק (Sof Pasuq)',code:'05C3'},
+  {ch:'׆',name:'נוּן הֲפוּכָה',code:'05C6'},
+  {ch:'׳',name:'גֵּרֵשׁ (Geresh)',code:'05F3'},
+  {ch:'״',name:'גֶּרְשַׁיִם (Gershayim)',code:'05F4'},
+  {ch:'שׁ',name:'שִׁין ימנית',code:'05C1'},
+  {ch:'שׂ',name:'שִׂין שמאלית',code:'05C2'},
+  {ch:'וּ',name:'שׁוּרֻק',code:'05C7'},
+];
+
+const presentation = [
+  {ch:'יִ',name:'Yod with Hiriq',code:'FB1D'},
+  {ch:'ײַ',name:'Yiddish Double Yod',code:'FB1F'},
+  {ch:'ﬠ',name:'Alt Ayin',code:'FB20'},
+  {ch:'ﬡ',name:'Alt Alef',code:'FB21'},
+  {ch:'ﬢ',name:'Alt Dalet',code:'FB22'},
+  {ch:'ﬣ',name:'Alt He',code:'FB23'},
+  {ch:'ﬤ',name:'Alt Kaf',code:'FB24'},
+  {ch:'ﬥ',name:'Alt Lamed',code:'FB25'},
+  {ch:'ﬦ',name:'Alt Mem',code:'FB26'},
+  {ch:'ﬧ',name:'Alt Resh',code:'FB27'},
+  {ch:'ﬨ',name:'Alt Tav',code:'FB28'},
+  {ch:'﬩',name:'Alt Plus',code:'FB29'},
+  {ch:'שׁ',name:'Shin+Shin Dot',code:'FB2A'},
+  {ch:'שׂ',name:'Shin+Sin Dot',code:'FB2B'},
+  {ch:'שּׁ',name:'Shin+Dagesh+Dot',code:'FB2C'},
+  {ch:'שּׂ',name:'Shin+Dagesh+Sin',code:'FB2D'},
+  {ch:'אַ',name:'Alef+Patah',code:'FB2E'},
+  {ch:'אָ',name:'Alef+Qamats',code:'FB2F'},
+  {ch:'אּ',name:'Alef+Mapiq',code:'FB30'},
+  {ch:'בּ',name:'Bet+Dagesh',code:'FB31'},
+  {ch:'גּ',name:'Gimel+Dagesh',code:'FB32'},
+  {ch:'דּ',name:'Dalet+Dagesh',code:'FB33'},
+  {ch:'הּ',name:'He+Mapiq',code:'FB34'},
+  {ch:'וּ',name:'Vav+Dagesh',code:'FB35'},
+  {ch:'זּ',name:'Zayin+Dagesh',code:'FB36'},
+  {ch:'טּ',name:'Tet+Dagesh',code:'FB38'},
+  {ch:'יּ',name:'Yod+Dagesh',code:'FB39'},
+  {ch:'ךּ',name:'Final Kaf+Dagesh',code:'FB3A'},
+  {ch:'כּ',name:'Kaf+Dagesh',code:'FB3B'},
+  {ch:'לּ',name:'Lamed+Dagesh',code:'FB3C'},
+  {ch:'מּ',name:'Mem+Dagesh',code:'FB3E'},
+  {ch:'נּ',name:'Nun+Dagesh',code:'FB40'},
+  {ch:'סּ',name:'Samekh+Dagesh',code:'FB41'},
+  {ch:'ףּ',name:'Final Pe+Dagesh',code:'FB43'},
+  {ch:'פּ',name:'Pe+Dagesh',code:'FB44'},
+  {ch:'צּ',name:'Tsadi+Dagesh',code:'FB46'},
+  {ch:'קּ',name:'Qof+Dagesh',code:'FB47'},
+  {ch:'רּ',name:'Resh+Dagesh',code:'FB48'},
+  {ch:'שּ',name:'Shin+Dagesh',code:'FB49'},
+  {ch:'תּ',name:'Tav+Dagesh',code:'FB4A'},
+];
+
+function makeCard(ch, name, code, delay = 0) {
+  const card = document.createElement('div');
+  card.className = 'char-card';
+  card.style.animationDelay = delay + 'ms';
+  card.innerHTML = `
+    <span class="char-display">${ch}</span>
+    <div class="char-name">${name}</div>
+    <div class="char-code">U+${code}</div>
+  `;
+  card.addEventListener('click', () => copyChar(ch, card));
+  return card;
+}
+
+function makeDemoItem(base, name, code, delay = 0) {
+  const item = document.createElement('div');
+  item.className = 'demo-item';
+  item.style.animationDelay = delay + 'ms';
+  item.innerHTML = `
+    <span class="demo-char">${base}</span>
+    <div class="demo-label">${name}<br><span style="font-size:0.55rem;color:#444;font-family:monospace;direction:ltr">U+${code}</span></div>
+  `;
+  item.addEventListener('click', () => copyChar(base, item));
+  return item;
+}
+
+function copyChar(ch, el) {
+  // Get clean character (strip combining chars for single letter copy)
+  navigator.clipboard.writeText(ch).catch(() => {});
+  el.classList.add('copied');
+  setTimeout(() => el.classList.remove('copied'), 800);
+  showToast('"' + ch + '" הועתק');
+}
+
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 1800);
+}
+
+// Render
+const lettersEl = document.getElementById('letters');
+baseLetters.forEach((l, i) => lettersEl.appendChild(makeCard(l.ch, l.name, l.code, i * 20)));
+
+const finalsEl = document.getElementById('finals');
+finals.forEach((l, i) => finalsEl.appendChild(makeCard(l.ch, l.name, l.code, i * 30)));
+
+const niqqudEl = document.getElementById('niqqud');
+niqqud.forEach((n, i) => niqqudEl.appendChild(makeDemoItem(n.base, n.name, n.code, i * 15)));
+
+const cantEl = document.getElementById('cantillation');
+cantillation.forEach((n, i) => cantEl.appendChild(makeDemoItem(n.base, n.name, n.code, i * 12)));
+
+const punctEl = document.getElementById('punctuation');
+punctuation.forEach((p, i) => punctEl.appendChild(makeCard(p.ch, p.name, p.code, i * 25)));
+
+const presEl = document.getElementById('presentation');
+presentation.forEach((p, i) => presEl.appendChild(makeCard(p.ch, p.name, p.code, i * 15)));
+</script>
+</body>
+</html>
