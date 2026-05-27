@@ -9,8 +9,97 @@
     <title>קושחאות חתומות — קושחה.נט</title>
     <link rel="icon" type="image/png" href="favicon.png">
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* ===== כפתור שפה צף ===== */
+        .lang-toggle {
+            position: fixed;
+            top: 18px;
+            right: 18px;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--lang-bg, rgba(60,60,80,0.45));
+            border: 1.5px solid var(--lang-border, rgba(180,180,220,0.3));
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 999px;
+            padding: 6px 14px 6px 10px;
+            cursor: pointer;
+            box-shadow: 0 4px 18px rgba(0,0,0,0.18);
+            transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.2s;
+            user-select: none;
+            font-family: inherit;
+        }
+
+        .lang-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 24px rgba(0,0,0,0.25);
+            background: var(--lang-bg-hover, rgba(60,60,80,0.65));
+        }
+
+        .lang-toggle:active {
+            transform: translateY(0);
+        }
+
+        .lang-globe { font-size: 16px; line-height: 1; }
+
+        .lang-text {
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            color: var(--lang-color, #f0f0ff);
+            line-height: 1;
+        }
+
+        .lang-current {
+            font-size: 11px;
+            font-weight: 400;
+            opacity: 0.7;
+            color: var(--lang-color, #f0f0ff);
+            line-height: 1;
+        }
+
+        .lang-divider {
+            width: 1px;
+            height: 14px;
+            background: var(--lang-color, #f0f0ff);
+            opacity: 0.3;
+        }
+
+        @keyframes langFlip {
+            0%   { opacity: 1; transform: scale(1); }
+            40%  { opacity: 0; transform: scale(0.85) rotate(-4deg); }
+            60%  { opacity: 0; transform: scale(0.85) rotate(4deg); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        .lang-flip { animation: langFlip 0.35s ease; }
+
+        :root {
+            --lang-bg: rgba(60,60,80,0.45);
+            --lang-bg-hover: rgba(60,60,80,0.65);
+            --lang-border: rgba(180,180,220,0.3);
+            --lang-color: #f0f0ff;
+        }
+
+        body.light-theme {
+            --lang-bg: rgba(255,255,255,0.6);
+            --lang-bg-hover: rgba(255,255,255,0.85);
+            --lang-border: rgba(0,0,0,0.15);
+            --lang-color: #1a1a2e;
+        }
+    </style>
 </head>
 <body>
+
+    <!-- כפתור שפה צף -->
+    <button class="lang-toggle" id="langToggle" title="Switch to English" aria-label="Switch to English">
+        <span class="lang-globe">🌐</span>
+        <span class="lang-divider"></span>
+        <span class="lang-text" id="langText">EN</span>
+        <span class="lang-current" id="langCurrent">עב</span>
+    </button>
 
     <!-- מתג ערכת נושא -->
     <div class="theme-toggle" role="switch" aria-label="החלפת מצב תצוגה">
@@ -18,63 +107,63 @@
             <input type="checkbox" id="themeCheckbox" aria-label="מצב יום">
             <span class="toggle-thumb"></span>
         </label>
-        <span class="toggle-label" id="themeLabel">לילה</span>
+        <span class="toggle-label" id="themeLabel" data-he-night="לילה" data-he-day="יום" data-en-night="Night" data-en-day="Day">לילה</span>
     </div>
 
     <!-- כותרת -->
     <header>
         <div class="header-logo">קושחה<span>.נט</span></div>
         <nav>
-            <a href="index.html">דף הבית</a>
-            <a href="downloads.html">קושחאות להורדה</a>
-            <a href="signed.html" class="active">קושחאות חתומות</a>
+            <a href="index.html" data-he="דף הבית" data-en="Home">דף הבית</a>
+            <a href="downloads.html" data-he="קושחאות להורדה" data-en="Downloads">קושחאות להורדה</a>
+            <a href="signed.html" class="active" data-he="קושחאות חתומות" data-en="Signed Firmware">קושחאות חתומות</a>
         </nav>
     </header>
 
     <!-- תוכן ראשי -->
     <main class="container">
 
-        <a href="index.html" class="back-btn">← חזרה לדף הבית</a>
+        <a href="index.html" class="back-btn" data-he="← חזרה לדף הבית" data-en="← Back to Home">← חזרה לדף הבית</a>
 
-        <div class="page-title">גרסאות חתומות</div>
+        <div class="page-title" data-he="גרסאות חתומות" data-en="Signed Firmware">גרסאות חתומות</div>
 
         <div class="table-wrap">
             <div class="table-header-bar">
-                <h3>//רשימת גרסאות חתומות</h3>
-                <span class="table-count">3 קבצים</span>
+                <h3 data-he="//רשימת גרסאות חתומות" data-en="// Signed Firmware List">//רשימת גרסאות חתומות</h3>
+                <span class="table-count" data-he="3 קבצים" data-en="3 files">3 קבצים</span>
             </div>
 
             <table>
                 <thead>
                     <tr>
-                        <th>גרסה</th>
-                        <th>תיאור</th>
-                        <th>סטטוס</th>
-                        <th>נפח</th>
-                        <th>הורדה</th>
+                        <th data-he="גרסה"  data-en="Version">גרסה</th>
+                        <th data-he="תיאור" data-en="Description">תיאור</th>
+                        <th data-he="סטטוס" data-en="Status">סטטוס</th>
+                        <th data-he="נפח"   data-en="Size">נפח</th>
+                        <th data-he="הורדה" data-en="Download">הורדה</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <td class="fw-name">f21 restore</td>
-                        <td>גרסה חתומה, ניתן לצרוב עם בוטלואדר נעול</td>
+                        <td><span data-he="גרסה חתומה, ניתן לצרוב עם בוטלואדר נעול" data-en="Signed version, can be flashed with locked bootloader">גרסה חתומה, ניתן לצרוב עם בוטלואדר נעול</span></td>
                         <td><span class="badge badge-stable">Stable</span></td>
                         <td class="fw-size">1.22 GB</td>
-                        <td><a href="https://drive.google.com/file/d/1XtkF7FwSQR84EQLwc3a22iWmjOK3dCrY/view?usp=sharing" class="dl-btn" target="_blank" rel="noopener noreferrer">↓ הורד</a></td>
+                        <td><a href="https://drive.google.com/file/d/1XtkF7FwSQR84EQLwc3a22iWmjOK3dCrY/view?usp=sharing" class="dl-btn" target="_blank" rel="noopener noreferrer" data-he="↓ הורד" data-en="↓ Download">↓ הורד</a></td>
                     </tr>
                     <tr>
-                        <td class="fw-name">f21 signed- מכשירים חדשים</td>
-                        <td>גרסא חתומה למכשירים החדשים - פורט טעינה אדום</td>
+                        <td class="fw-name" data-he="f21 signed- מכשירים חדשים" data-en="f21 signed – new devices">f21 signed- מכשירים חדשים</td>
+                        <td><span data-he="גרסא חתומה למכשירים החדשים - פורט טעינה אדום" data-en="Signed version for new devices – red charging port">גרסא חתומה למכשירים החדשים - פורט טעינה אדום</span></td>
                         <td><span class="badge badge-stable">Stable</span></td>
                         <td class="fw-size">922.1 MB</td>
-                        <td><a href="https://drive.google.com/file/d/1PcQYk64MgZ7vdU6DCiRSsU2dhUolLxA4/view" class="dl-btn" target="_blank" rel="noopener noreferrer">↓ הורד</a></td>
+                        <td><a href="https://drive.google.com/file/d/1PcQYk64MgZ7vdU6DCiRSsU2dhUolLxA4/view" class="dl-btn" target="_blank" rel="noopener noreferrer" data-he="↓ הורד" data-en="↓ Download">↓ הורד</a></td>
                     </tr>
                     <tr>
                         <td class="fw-name">F21Pro_VoLTE_Global_Locked</td>
-                        <td>גרסה חתומה, שירותי גוגל וVoLTE ניתן לקנות מ @מישהו12 ו @שניאור-שמח</td>
+                        <td><span data-he="גרסה חתומה, שירותי גוגל וVoLTE ניתן לקנות מ @מישהו12 ו @שניאור-שמח" data-en="Signed version with Google services and VoLTE. Purchase from @מישהו12 and @שניאור-שמח">גרסה חתומה, שירותי גוגל וVoLTE ניתן לקנות מ @מישהו12 ו @שניאור-שמח</span></td>
                         <td><span class="badge badge-stable">Stable</span></td>
                         <td class="fw-size">1.51 GB</td>
-                        <td><a href="https://ko-fi.com/s/110f9facd6" class="dl-btn" target="_blank" rel="noopener noreferrer">לקנייה</a></td>
+                        <td><a href="https://ko-fi.com/s/110f9facd6" class="dl-btn" target="_blank" rel="noopener noreferrer" data-he="לקנייה" data-en="Buy">לקנייה</a></td>
                     </tr>
                 </tbody>
             </table>
@@ -99,5 +188,82 @@
     </footer>
 
     <script src="app.js"></script>
+    <script>
+    (function () {
+        const btn        = document.getElementById('langToggle');
+        const langText   = document.getElementById('langText');
+        const langCurr   = document.getElementById('langCurrent');
+        const themeLabel = document.getElementById('themeLabel');
+        const html       = document.documentElement;
+
+        const PAGE_TITLES = {
+            he: 'קושחאות חתומות — קושחה.נט',
+            en: 'Signed Firmware — Kushcha.net'
+        };
+
+        const THEME_MAP = {
+            'לילה': { he: 'לילה', en: 'Night' },
+            'יום':  { he: 'יום',  en: 'Day'   }
+        };
+
+        let currentLang = localStorage.getItem('siteLang') || 'he';
+
+        function translateThemeLabel(lang) {
+            if (!themeLabel) return;
+            const txt = themeLabel.textContent.trim();
+            let heKey = txt;
+            if (txt === 'Night') heKey = 'לילה';
+            if (txt === 'Day')   heKey = 'יום';
+            const entry = THEME_MAP[heKey];
+            if (entry) themeLabel.textContent = entry[lang];
+        }
+
+        // Watch for app.js changing themeLabel when user toggles theme
+        if (themeLabel) {
+            new MutationObserver(() => {
+                translateThemeLabel(currentLang);
+            }).observe(themeLabel, { childList: true, characterData: true, subtree: true });
+        }
+
+        function applyLang(lang) {
+            currentLang = lang;
+            localStorage.setItem('siteLang', lang);
+
+            html.setAttribute('lang', lang === 'en' ? 'en' : 'he');
+            html.setAttribute('dir', lang === 'en' ? 'ltr' : 'rtl');
+
+            document.title = PAGE_TITLES[lang];
+
+            document.querySelectorAll('[data-he][data-en]').forEach(el => {
+                el.textContent = el.dataset[lang];
+            });
+
+            translateThemeLabel(lang);
+
+            if (lang === 'en') {
+                langText.textContent = 'עב';
+                langCurr.textContent = 'EN';
+                btn.title = 'החלף לעברית';
+                btn.setAttribute('aria-label', 'Switch to Hebrew');
+            } else {
+                langText.textContent = 'EN';
+                langCurr.textContent = 'עב';
+                btn.title = 'Switch to English';
+                btn.setAttribute('aria-label', 'Switch to English');
+            }
+        }
+
+        applyLang(currentLang);
+
+        btn.addEventListener('click', () => {
+            btn.classList.remove('lang-flip');
+            void btn.offsetWidth;
+            btn.classList.add('lang-flip');
+            applyLang(currentLang === 'he' ? 'en' : 'he');
+        });
+
+        btn.addEventListener('animationend', () => btn.classList.remove('lang-flip'));
+    })();
+    </script>
 </body>
 </html>
