@@ -9,8 +9,105 @@
     <title>קושחאות להורדה — קושחה.נט</title>
     <link rel="icon" type="image/png" href="favicon.png">
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* ===== כפתור שפה צף ===== */
+        .lang-toggle {
+            position: fixed;
+            top: 18px;
+            right: 18px;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--lang-bg, rgba(255,255,255,0.15));
+            border: 1.5px solid var(--lang-border, rgba(255,255,255,0.35));
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 999px;
+            padding: 6px 14px 6px 10px;
+            cursor: pointer;
+            box-shadow: 0 4px 18px rgba(0,0,0,0.18);
+            transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.2s;
+            user-select: none;
+            text-decoration: none;
+            font-family: inherit;
+        }
+
+        .lang-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 24px rgba(0,0,0,0.25);
+            background: var(--lang-bg-hover, rgba(255,255,255,0.25));
+        }
+
+        .lang-toggle:active {
+            transform: translateY(0);
+        }
+
+        .lang-toggle .lang-globe {
+            font-size: 16px;
+            line-height: 1;
+        }
+
+        .lang-toggle .lang-text {
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            color: var(--lang-color, #fff);
+            line-height: 1;
+        }
+
+        .lang-toggle .lang-current {
+            font-size: 11px;
+            font-weight: 400;
+            opacity: 0.7;
+            color: var(--lang-color, #fff);
+            line-height: 1;
+        }
+
+        .lang-toggle .lang-divider {
+            width: 1px;
+            height: 14px;
+            background: var(--lang-color, #fff);
+            opacity: 0.3;
+        }
+
+        /* אנימציית החלפה */
+        @keyframes langFlip {
+            0%   { opacity: 1; transform: scale(1); }
+            40%  { opacity: 0; transform: scale(0.85) rotate(-4deg); }
+            60%  { opacity: 0; transform: scale(0.85) rotate(4deg); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        .lang-flip {
+            animation: langFlip 0.35s ease;
+        }
+
+        /* תמיכה בערכת נושא כהה/בהיר */
+        :root {
+            --lang-bg: rgba(60,60,80,0.45);
+            --lang-bg-hover: rgba(60,60,80,0.65);
+            --lang-border: rgba(180,180,220,0.3);
+            --lang-color: #f0f0ff;
+        }
+
+        body.light-theme {
+            --lang-bg: rgba(255,255,255,0.6);
+            --lang-bg-hover: rgba(255,255,255,0.85);
+            --lang-border: rgba(0,0,0,0.15);
+            --lang-color: #1a1a2e;
+        }
+    </style>
 </head>
 <body>
+
+    <!-- כפתור שפה צף -->
+    <button class="lang-toggle" id="langToggle" title="Switch language / החלף שפה" aria-label="Switch language">
+        <span class="lang-globe">🌐</span>
+        <span class="lang-divider"></span>
+        <span class="lang-text" id="langText">EN</span>
+        <span class="lang-current" id="langCurrent">עב</span>
+    </button>
 
     <!-- מתג ערכת נושא -->
     <div class="theme-toggle" role="switch" aria-label="החלפת מצב תצוגה">
@@ -25,108 +122,126 @@
     <header>
         <div class="header-logo">קושחה<span>.נט</span></div>
         <nav>
-            <a href="index.html">דף הבית</a>
-            <a href="downloads.html" class="active">קושחאות להורדה</a>
-            <a href="signed.html">קושחאות חתומות</a>
+            <a href="index.html" data-he="דף הבית" data-en="Home">דף הבית</a>
+            <a href="downloads.html" class="active" data-he="קושחאות להורדה" data-en="Downloads">קושחאות להורדה</a>
+            <a href="signed.html" data-he="קושחאות חתומות" data-en="Signed Firmware">קושחאות חתומות</a>
         </nav>
     </header>
 
     <!-- תוכן ראשי -->
     <main class="container">
 
-        <a href="index.html" class="back-btn">← חזרה לדף הבית</a>
+        <a href="index.html" class="back-btn" data-he="← חזרה לדף הבית" data-en="← Back to Home">← חזרה לדף הבית</a>
 
-        <div class="page-title">קושחאות זמינות להורדה</div>
+        <div class="page-title" data-he="קושחאות זמינות להורדה" data-en="Available Firmware Downloads">קושחאות זמינות להורדה</div>
 
         <div class="table-wrap">
             <div class="table-header-bar">
-                <h3>//רשימת קושחאות</h3>
-                <span class="table-count">10 קבצים</span>
+                <h3 data-he="//רשימת קושחאות" data-en="// Firmware List">//רשימת קושחאות</h3>
+                <span class="table-count" data-he="10 קבצים" data-en="10 files">10 קבצים</span>
             </div>
 
             <table>
                 <thead>
                     <tr>
-                        <th>גרסה</th>
-                        <th>תיאור</th>
-                        <th>סטטוס</th>
-                        <th>נפח</th>
-                        <th>הורדה</th>
+                        <th data-he="גרסה" data-en="Version">גרסה</th>
+                        <th data-he="תיאור" data-en="Description">תיאור</th>
+                        <th data-he="סטטוס" data-en="Status">סטטוס</th>
+                        <th data-he="נפח" data-en="Size">נפח</th>
+                        <th data-he="הורדה" data-en="Download">הורדה</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <td class="fw-name">f21 1.1.1 TripleU edition</td>
                         <td>
-    האפליקציות הוחלפו לאפליקציות של גוגל <br>
-    <a href="https://mitmachim.top/topic/77581/%D7%9C%D7%94%D7%95%D7%A8%D7%93%D7%94-%D7%92%D7%A8%D7%A1%D7%94-%D7%97%D7%93%D7%A9%D7%94-%D7%9E%D7%95%D7%AA%D7%90%D7%9E%D7%AA-%D7%90%D7%99%D7%A9%D7%99%D7%AA-%D7%9C-f21-%D7%94%D7%9B%D7%9C-%D7%91%D7%92%D7%A8%D7%A1%D7%94-%D7%A9%D7%9C-%D7%92%D7%95%D7%92%D7%9C" target="_blank" rel="noopener noreferrer">לשרשור המלא</a>
-</td>
+                            <span data-he="האפליקציות הוחלפו לאפליקציות של גוגל" data-en="Apps replaced with Google apps">האפליקציות הוחלפו לאפליקציות של גוגל</span><br>
+                            <a href="https://mitmachim.top/topic/77581/%D7%9C%D7%94%D7%95%D7%A8%D7%93%D7%94-%D7%92%D7%A8%D7%A1%D7%94-%D7%97%D7%93%D7%A9%D7%94-%D7%9E%D7%95%D7%AA%D7%90%D7%9E%D7%AA-%D7%90%D7%99%D7%A9%D7%99%D7%AA-%D7%9C-f21-%D7%94%D7%9B%D7%9C-%D7%91%D7%92%D7%A8%D7%A1%D7%94-%D7%A9%D7%9C-%D7%92%D7%95%D7%92%D7%9C" target="_blank" rel="noopener noreferrer" data-he="לשרשור המלא" data-en="Full thread">לשרשור המלא</a>
+                        </td>
                         <td><span class="badge badge-stable">Stable</span></td>
                         <td class="fw-size">79.4 MB</td>
-                        <td><a href="https://drive.google.com/file/d/1pqXryNNXKPpa6XJSjAknvTiu7kfflfbl/view?usp=sharing" class="dl-btn" data-href="https://drive.google.com/file/d/1pqXryNNXKPpa6XJSjAknvTiu7kfflfbl/view?usp=sharing" target="_blank" rel="noopener noreferrer">↓ הורד</a></td>
+                        <td><a href="https://drive.google.com/file/d/1pqXryNNXKPpa6XJSjAknvTiu7kfflfbl/view?usp=sharing" class="dl-btn" target="_blank" rel="noopener noreferrer" data-he="↓ הורד" data-en="↓ Download">↓ הורד</a></td>
                     </tr>
                     <tr>
                         <td class="fw-name">f21 restore</td>
-                        <td>גרסה חתומה, ניתן לצרוב עם בוטלואדר נעול</td>
+                        <td><span data-he="גרסה חתומה, ניתן לצרוב עם בוטלואדר נעול" data-en="Signed version, can be flashed with locked bootloader">גרסה חתומה, ניתן לצרוב עם בוטלואדר נעול</span></td>
                         <td><span class="badge badge-stable">Stable</span></td>
                         <td class="fw-size">1.22 GB</td>
-                        <td><a href="https://drive.google.com/file/d/1XtkF7FwSQR84EQLwc3a22iWmjOK3dCrY/view?usp=sharing" class="dl-btn" data-href="https://drive.google.com/file/d/1XtkF7FwSQR84EQLwc3a22iWmjOK3dCrY/view?usp=sharing" target="_blank" rel="noopener noreferrer">↓ הורד</a></td>
+                        <td><a href="https://drive.google.com/file/d/1XtkF7FwSQR84EQLwc3a22iWmjOK3dCrY/view?usp=sharing" class="dl-btn" target="_blank" rel="noopener noreferrer" data-he="↓ הורד" data-en="↓ Download">↓ הורד</a></td>
                     </tr>
                     <tr>
                         <td class="fw-name">f21 los 18.1 gtr</td>
-                        <td>מבוססת על Lineage OS <br> <a href="https://mitmachim.top/topic/76460/%D7%9E%D7%93%D7%A8%D7%99%D7%9A-%D7%92%D7%A8%D7%A1%D7%94-%D7%97%D7%93%D7%A9%D7%94-%D7%A2%D7%91%D7%95%D7%A8-%D7%94-los-18.1-gapps-twrp-f21-pro" target="_blank" rel="noopener noreferrer">לשרשור המלא</a></td>
+                        <td>
+                            <span data-he="מבוססת על Lineage OS" data-en="Based on Lineage OS">מבוססת על Lineage OS</span><br>
+                            <a href="https://mitmachim.top/topic/76460/%D7%9E%D7%93%D7%A8%D7%99%D7%9A-%D7%92%D7%A8%D7%A1%D7%94-%D7%97%D7%93%D7%A9%D7%94-%D7%A2%D7%91%D7%95%D7%A8-%D7%94-los-18.1-gapps-twrp-f21-pro" target="_blank" rel="noopener noreferrer" data-he="לשרשור המלא" data-en="Full thread">לשרשור המלא</a>
+                        </td>
                         <td><span class="badge badge-beta">Beta</span></td>
                         <td class="fw-size">958.1 MB</td>
-                        <td><a href="https://drive.google.com/file/d/1EA0KwBXQFkZ4ntP4xKPqSbTR3O1zgsYQ/view?usp=sharing" class="dl-btn" data-href="https://drive.google.com/file/d/1EA0KwBXQFkZ4ntP4xKPqSbTR3O1zgsYQ/view?usp=sharing" target="_blank" rel="noopener noreferrer">↓ הורד</a></td>
+                        <td><a href="https://drive.google.com/file/d/1EA0KwBXQFkZ4ntP4xKPqSbTR3O1zgsYQ/view?usp=sharing" class="dl-btn" target="_blank" rel="noopener noreferrer" data-he="↓ הורד" data-en="↓ Download">↓ הורד</a></td>
                     </tr>
                     <tr>
                         <td class="fw-name">f21 los 20 beta</td>
-                        <td>מבוססת על Lineage OS ומציעה שפע של הגדרות ותכנים נוספים. היא דורשת מעט הכנות, אך התוצאה הסופית יפהפייה. <br> <a href="https://mitmachim.top/topic/75427/%D7%9E%D7%93%D7%A8%D7%99%D7%9A-%D7%92%D7%99%D7%A8%D7%A1%D7%94-%D7%90%D7%A0%D7%93%D7%A8%D7%95%D7%90%D7%99%D7%93-13-%D7%9C%D7%A9%D7%99%D7%95%D7%9E%D7%99-f21-%D7%9E%D7%A9%D7%94%D7%95-%D7%9E%D7%98%D7%95%D7%A8%D7%A3-%D7%92%D7%99%D7%A8%D7%A1%D7%AA-%D7%91%D7%98%D7%90" target="_blank" rel="noopener noreferrer">לשרשור המלא</a></td>
+                        <td>
+                            <span data-he="מבוססת על Lineage OS ומציעה שפע של הגדרות ותכנים נוספים. היא דורשת מעט הכנות, אך התוצאה הסופית יפהפייה." data-en="Based on Lineage OS, offering a wealth of settings and extra content. Requires some preparation, but the end result is beautiful.">מבוססת על Lineage OS ומציעה שפע של הגדרות ותכנים נוספים. היא דורשת מעט הכנות, אך התוצאה הסופית יפהפייה.</span><br>
+                            <a href="https://mitmachim.top/topic/75427/%D7%9E%D7%93%D7%A8%D7%99%D7%9A-%D7%92%D7%99%D7%A8%D7%A1%D7%94-%D7%90%D7%A0%D7%93%D7%A8%D7%95%D7%90%D7%99%D7%93-13-%D7%9C%D7%A9%D7%99%D7%95%D7%9E%D7%99-f21-%D7%9E%D7%A9%D7%94%D7%95-%D7%9E%D7%98%D7%95%D7%A8%D7%A3-%D7%92%D7%99%D7%A8%D7%A1%D7%AA-%D7%91%D7%98%D7%90" target="_blank" rel="noopener noreferrer" data-he="לשרשור המלא" data-en="Full thread">לשרשור המלא</a>
+                        </td>
                         <td><span class="badge badge-beta">Beta</span></td>
                         <td class="fw-size">15.7 MB</td>
-                        <td><a href="https://drive.google.com/drive/folders/1DYZHaD9ftGIMEYfgwARdG8gv0Eb-Jjxf?usp=sharing" class="dl-btn" data-href="https://drive.google.com/drive/folders/1DYZHaD9ftGIMEYfgwARdG8gv0Eb-Jjxf?usp=sharing" target="_blank" rel="noopener noreferrer">↓ הורד</a></td>
+                        <td><a href="https://drive.google.com/drive/folders/1DYZHaD9ftGIMEYfgwARdG8gv0Eb-Jjxf?usp=sharing" class="dl-btn" target="_blank" rel="noopener noreferrer" data-he="↓ הורד" data-en="↓ Download">↓ הורד</a></td>
                     </tr>
                     <tr>
                         <td class="fw-name">f21 A.I.V</td>
-                        <td>גרסה כשרה. כוללת חנות אפליקציות מותאמת אישית ושירותי גוגל גם יחד. כנראה הבחירה הכשרה הטובה ביותר.<br> <a href="https://mitmachim.top/post/841884" target="_blank" rel="noopener noreferrer">לשרשור המלא</a></td>
+                        <td>
+                            <span data-he="גרסה כשרה. כוללת חנות אפליקציות מותאמת אישית ושירותי גוגל גם יחד. כנראה הבחירה הכשרה הטובה ביותר." data-en="Kosher version. Includes a custom app store and Google services together. Probably the best kosher choice.">גרסה כשרה. כוללת חנות אפליקציות מותאמת אישית ושירותי גוגל גם יחד. כנראה הבחירה הכשרה הטובה ביותר.</span><br>
+                            <a href="https://mitmachim.top/post/841884" target="_blank" rel="noopener noreferrer" data-he="לשרשור המלא" data-en="Full thread">לשרשור המלא</a>
+                        </td>
                         <td><span class="badge badge-stable">Stable</span></td>
                         <td class="fw-size">734 MB</td>
-                        <td><a href="https://drive.google.com/file/d/1zmikpS3HCr-3eUgM90V9nBUnEIS4uiOX/view?usp=sharing" class="dl-btn" data-href="https://drive.google.com/file/d/1zmikpS3HCr-3eUgM90V9nBUnEIS4uiOX/view?usp=sharing" target="_blank" rel="noopener noreferrer">↓ הורד</a></td>
+                        <td><a href="https://drive.google.com/file/d/1zmikpS3HCr-3eUgM90V9nBUnEIS4uiOX/view?usp=sharing" class="dl-btn" target="_blank" rel="noopener noreferrer" data-he="↓ הורד" data-en="↓ Download">↓ הורד</a></td>
                     </tr>
                     <tr>
                         <td class="fw-name">f21 android 13 beta</td>
-                        <td>מבוססת על אנדרואיד 13 AOSP.</td>
+                        <td><span data-he="מבוססת על אנדרואיד 13 AOSP." data-en="Based on Android 13 AOSP.">מבוססת על אנדרואיד 13 AOSP.</span></td>
                         <td><span class="badge badge-beta">Beta</span></td>
                         <td class="fw-size">1.39 GB</td>
-                        <td><a href="https://drive.google.com/file/d/1gKMgRnjCpa2pzL26m84SDPIa29y5c0Tb/view?usp=sharing" class="dl-btn" data-href="https://drive.google.com/file/d/1gKMgRnjCpa2pzL26m84SDPIa29y5c0Tb/view?usp=sharing" target="_blank" rel="noopener noreferrer">↓ הורד</a></td>
+                        <td><a href="https://drive.google.com/file/d/1gKMgRnjCpa2pzL26m84SDPIa29y5c0Tb/view?usp=sharing" class="dl-btn" target="_blank" rel="noopener noreferrer" data-he="↓ הורד" data-en="↓ Download">↓ הורד</a></td>
                     </tr>
                     <tr>
                         <td class="fw-name">f21 gtr</td>
-                        <td>תצטרכו לבצע את ההגדרות והמדריך לקבלת שירותי גוגל. <br> <a href="https://xdaforums.com/t/guide-xiaomi-qin-f21-pro-custom-firmware-root-playstore-certified.4405615/" target="_blank" rel="noopener noreferrer">לשרשור המלא בXDA</a></td>
+                        <td>
+                            <span data-he="תצטרכו לבצע את ההגדרות והמדריך לקבלת שירותי גוגל." data-en="You'll need to follow the setup guide to get Google services.">תצטרכו לבצע את ההגדרות והמדריך לקבלת שירותי גוגל.</span><br>
+                            <a href="https://xdaforums.com/t/guide-xiaomi-qin-f21-pro-custom-firmware-root-playstore-certified.4405615/" target="_blank" rel="noopener noreferrer" data-he="לשרשור המלא בXDA" data-en="Full XDA thread">לשרשור המלא בXDA</a>
+                        </td>
                         <td><span class="badge badge-beta">Beta</span></td>
                         <td class="fw-size">6.4 MB</td>
-                        <td><a href="https://drive.google.com/file/d/1QlyaZyV14hZL3CRkq42XvIknG2wbVHMi/view?usp=sharing" class="dl-btn" data-href="https://drive.google.com/file/d/1QlyaZyV14hZL3CRkq42XvIknG2wbVHMi/view?usp=sharing" target="_blank" rel="noopener noreferrer">↓ הורד</a></td>
+                        <td><a href="https://drive.google.com/file/d/1QlyaZyV14hZL3CRkq42XvIknG2wbVHMi/view?usp=sharing" class="dl-btn" target="_blank" rel="noopener noreferrer" data-he="↓ הורד" data-en="↓ Download">↓ הורד</a></td>
                     </tr>
                     <tr>
                         <td class="fw-name">F21Pro_VoLTE_Global_Locked</td>
-                        <td>גרסה חתומה, שירותי גוגל וVoLte ניתן לקנות מ @מישהו12 ו @שניאור-שמח</td>
+                        <td><span data-he="גרסה חתומה, שירותי גוגל וVoLte ניתן לקנות מ @מישהו12 ו @שניאור-שמח" data-en="Signed version with Google services and VoLTE. Purchase from @מישהו12 and @שניאור-שמח">גרסה חתומה, שירותי גוגל וVoLte ניתן לקנות מ @מישהו12 ו @שניאור-שמח</span></td>
                         <td><span class="badge badge-stable">Stable</span></td>
                         <td class="fw-size">1.51 GB</td>
-                        <td><a href="https://ko-fi.com/s/110f9facd6" class="dl-btn" data-href="https://ko-fi.com/s/110f9facd6" target="_blank" rel="noopener noreferrer">לקנייה</a></td>
+                        <td><a href="https://ko-fi.com/s/110f9facd6" class="dl-btn" target="_blank" rel="noopener noreferrer" data-he="לקנייה" data-en="Buy">לקנייה</a></td>
                     </tr>
                     <tr>
                         <td class="fw-name">f22 brick restore</td>
-                        <td>לשחזור מכשיר תקול<br> <a href="https://mitmachim.top/topic/60327/%D7%9E%D7%93%D7%A8%D7%99%D7%9A-%D7%AA%D7%99%D7%A7%D7%95%D7%9F-f22-pro-%D7%9E%D7%94%D7%90%D7%A8%D7%93-%D7%91%D7%A8%D7%99%D7%A7-64-%D7%92%D7%99%D7%92%D7%94?_=1723385899027" target="_blank" rel="noopener noreferrer">לשרשור המלא</a></td>
+                        <td>
+                            <span data-he="לשחזור מכשיר תקול" data-en="For restoring a bricked device">לשחזור מכשיר תקול</span><br>
+                            <a href="https://mitmachim.top/topic/60327/%D7%9E%D7%93%D7%A8%D7%99%D7%9A-%D7%AA%D7%99%D7%A7%D7%95%D7%9F-f22-pro-%D7%9E%D7%94%D7%90%D7%A8%D7%93-%D7%91%D7%A8%D7%99%D7%A7-64-%D7%92%D7%99%D7%92%D7%94?_=1723385899027" target="_blank" rel="noopener noreferrer" data-he="לשרשור המלא" data-en="Full thread">לשרשור המלא</a>
+                        </td>
                         <td><span class="badge badge-stable">Stable</span></td>
                         <td class="fw-size">2.76 GB</td>
-                        <td><a href="https://drive.google.com/file/d/1Ey-KesbpngjNykw8tRVCGIifAOuMtfrh/view?usp=sharing" class="dl-btn" data-href="https://drive.google.com/file/d/1Ey-KesbpngjNykw8tRVCGIifAOuMtfrh/view?usp=sharing" target="_blank" rel="noopener noreferrer">↓ הורד</a></td>
+                        <td><a href="https://drive.google.com/file/d/1Ey-KesbpngjNykw8tRVCGIifAOuMtfrh/view?usp=sharing" class="dl-btn" target="_blank" rel="noopener noreferrer" data-he="↓ הורד" data-en="↓ Download">↓ הורד</a></td>
                     </tr>
                     <tr>
-                        <td class="fw-name">גירסא כשרה חינמית ל Qin F21 Pro</td>
-                        <td>גרסה כשרה של @אני-אני-אני. <br> שימו לב, הוראות הצריבה שונות <br> <a href="https://mitmachim.top/topic/68619/%D7%A9%D7%99%D7%AA%D7%95%D7%A3-%D7%92%D7%99%D7%A8%D7%A1%D7%90-%D7%9B%D7%A9%D7%A8%D7%94-%D7%97%D7%99%D7%A0%D7%9E%D7%99%D7%AA-%D7%9C-qin-f21-pro" target="_blank" rel="noopener noreferrer">לשרשור המלא</a></td>
+                        <td class="fw-name" data-he="גירסא כשרה חינמית ל Qin F21 Pro" data-en="Free Kosher Version for Qin F21 Pro">גירסא כשרה חינמית ל Qin F21 Pro</td>
+                        <td>
+                            <span data-he="גרסה כשרה של @אני-אני-אני. שימו לב, הוראות הצריבה שונות" data-en="Kosher version by @אני-אני-אני. Note: flashing instructions differ.">גרסה כשרה של @אני-אני-אני. <br> שימו לב, הוראות הצריבה שונות</span><br>
+                            <a href="https://mitmachim.top/topic/68619/%D7%A9%D7%99%D7%AA%D7%95%D7%A3-%D7%92%D7%99%D7%A8%D7%A1%D7%90-%D7%9B%D7%A9%D7%A8%D7%94-%D7%97%D7%99%D7%A0%D7%9E%D7%99%D7%AA-%D7%9C-qin-f21-pro" target="_blank" rel="noopener noreferrer" data-he="לשרשור המלא" data-en="Full thread">לשרשור המלא</a>
+                        </td>
                         <td><span class="badge badge-beta">Beta</span></td>
                         <td class="fw-size">922 MB</td>
-                        <td><a href="https://drive.google.com/file/d/1Z2H-EvYXs7DPbKkjcTv0CM7zXs8fkHm4/view?pli=1" class="dl-btn" data-href="https://drive.google.com/file/d/1Z2H-EvYXs7DPbKkjcTv0CM7zXs8fkHm4/view?pli=1" target="_blank" rel="noopener noreferrer">↓ הורד</a></td>
+                        <td><a href="https://drive.google.com/file/d/1Z2H-EvYXs7DPbKkjcTv0CM7zXs8fkHm4/view?pli=1" class="dl-btn" target="_blank" rel="noopener noreferrer" data-he="↓ הורד" data-en="↓ Download">↓ הורד</a></td>
                     </tr>
                 </tbody>
             </table>
@@ -151,5 +266,72 @@
     </footer>
 
     <script src="app.js"></script>
+    <script>
+    (function () {
+        const btn       = document.getElementById('langToggle');
+        const langText  = document.getElementById('langText');
+        const langCurr  = document.getElementById('langCurrent');
+        const html      = document.documentElement;
+
+        // Extra strings not covered by data-he/data-en attributes
+        const PAGE_TITLES = {
+            he: 'קושחאות להורדה — קושחה.נט',
+            en: 'Firmware Downloads — Kushcha.net'
+        };
+
+        let currentLang = localStorage.getItem('siteLang') || 'he';
+
+        function applyLang(lang) {
+            currentLang = lang;
+            localStorage.setItem('siteLang', lang);
+
+            // Set HTML dir + lang
+            if (lang === 'en') {
+                html.setAttribute('lang', 'en');
+                html.setAttribute('dir', 'ltr');
+            } else {
+                html.setAttribute('lang', 'he');
+                html.setAttribute('dir', 'rtl');
+            }
+
+            // Update page title
+            document.title = PAGE_TITLES[lang];
+
+            // Translate all elements with data-he / data-en
+            document.querySelectorAll('[data-he][data-en]').forEach(el => {
+                el.textContent = el.dataset[lang];
+            });
+
+            // Update button labels
+            if (lang === 'en') {
+                langText.textContent = 'עב';
+                langCurr.textContent = 'EN';
+                btn.title = 'החלף לעברית';
+                btn.setAttribute('aria-label', 'Switch to Hebrew');
+            } else {
+                langText.textContent = 'EN';
+                langCurr.textContent = 'עב';
+                btn.title = 'Switch to English';
+                btn.setAttribute('aria-label', 'Switch to English');
+            }
+        }
+
+        // Initial apply
+        applyLang(currentLang);
+
+        // Toggle on click
+        btn.addEventListener('click', () => {
+            btn.classList.remove('lang-flip');
+            // Force reflow to restart animation
+            void btn.offsetWidth;
+            btn.classList.add('lang-flip');
+            applyLang(currentLang === 'he' ? 'en' : 'he');
+        });
+
+        btn.addEventListener('animationend', () => {
+            btn.classList.remove('lang-flip');
+        });
+    })();
+    </script>
 </body>
 </html>
